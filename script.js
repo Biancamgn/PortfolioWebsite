@@ -198,7 +198,7 @@ function isRateLimited() {
 }
 
 // 3. Spam Keyword Detection setup
-const spamWords = ["free money", "buy now", "click here", "subscribe", "promo"];
+const spamWords = ["free money", "buy now", "click here", "subscribe", "promo", "buy", "cheap", "discount", "offer", "winner", "win", "prize", "cash"];
 function containsSpam(message) {
   const lowerMessage = message.toLowerCase();
   return spamWords.some(word => lowerMessage.includes(word));
@@ -234,6 +234,5 @@ if (form) {
       return;
     }
 
-    // If all checks pass, the form will naturally submit to FormSubmit.co
   });
 }
