@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bianca Manganaan — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="loader-screen" id="loaderScreen">
+  <div class="loader-welcome" id="loaderWelcome">Welcome</div>
+  <div class="loader-clock-wrap" id="loaderClockWrap">
+    <div class="loader-date-text" id="loaderDateText"></div>
+    <div class="clock-container">
+      <div class="clock-blob blob-1"></div>
+      <div class="clock-blob blob-2"></div>
+      <div class="clock-glass">
+        <div class="clock-digit-box"><div class="clock-digit" id="clockHr">00</div></div>
+        <div class="clock-colon">:</div>
+        <div class="clock-digit-box"><div class="clock-digit" id="clockMin">00</div></div>
+        <div class="clock-colon">:</div>
+        <div class="clock-digit-box"><div class="clock-digit" id="clockSec">00</div></div>
+        <div class="clock-ampm-box"><div class="clock-ampm" id="clockAmpm">AM</div></div>
+      </div>
+    </div>
+    <div class="loader-enter-text" id="loaderEnter">Click anywhere to enter</div>
+  </div>
+</div>
+
+<canvas id="spiderCanvas"></canvas>
+
+<div class="top-header">
+  <div class="brand"><div class="brand-icon">B</div><span class="brand-name">Bianca Manganaan</span></div>
+  <a href="#contact" class="hire-top-btn"><i class="bi bi-send"></i> Hire Me</a>
+</div>
+
+<div class="site-wrapper">
+  <div class="left-column">
+    <div class="sidebar-clock">
+      <div class="sidebar-greeting" id="sidebarGreeting">
+        <i class="bi bi-sun"></i> Good Morning!
+      </div>
+      <div class="sidebar-time">
+        <span id="sbHr">00</span><span class="colon">:</span><span id="sbMin">00</span> <span class="ampm" id="sbAmpm">AM</span>
+      </div>
+      <div class="sidebar-date" id="sbDate">Monday, January 1</div>
+    </div>
+  
+    <nav class="sidebar-nav">
+      <ul>
+        <li><a href="#home" class="active" data-section="home">Home <i class="bi bi-house"></i></a></li>
+        <li><a href="#about" data-section="about">About Me <i class="bi bi-person"></i></a></li>
+        <li><a href="#works" data-section="works">Works <i class="bi bi-grid"></i></a></li>
+        <li><a href="#experience" data-section="experience">Experience <i class="bi bi-briefcase"></i></a></li>
+        <li><a href="#education" data-section="education">Education <i class="bi bi-mortarboard"></i></a></li>
+        <li><a href="#references" data-section="references">Testimonial <i class="bi bi-star"></i></a></li>
+        <li><a href="#contact" data-section="contact">Contact <i class="bi bi-envelope"></i></a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-contact">
+      <div class="sc-label">Phone:</div>
+      <div class="sc-value">+63 956 085 3210</div>
+      <div class="sc-label">Email:</div>
+      <div class="sc-value">bianca_manganaan@dlsu.edu.ph</div>
+      <div class="social-row">
+        <a href="#"><i class="bi bi-facebook"></i></a><a href="#"><i class="bi bi-instagram"></i></a><a href="#"><i class="bi bi-github"></i></a><a href="#"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <section id="home" class="card-section hero-card fade-up">
+      <div>
+        <div class="hero-greeting">Hi there! <span></span></div>
+        <h1 class="hero-title">Computer Engineering &amp;<br><em>Cybersecurity</em> Student.</h1>
+        <p class="hero-desc">I am a dedicated Computer Engineering student from De La Salle University, passionate about building secure systems and turning creative ideas into innovative digital solutions.</p>
+        <div class="hero-btns">
+          <a href="resume/resume.html" target="_blank" class="btn-outline"><i class="bi bi-file-earmark-person"></i> View Resume</a>
+          <a href="#contact" class="btn-solid"><i class="bi bi-send-fill"></i> Hire Me Now</a>
+        </div>
+      </div>
+      <div class="hero-img-wrap"><div class="hero-img-container">
+        <img src="assets/profile.jpg" alt="Bianca Manganaan" class="hero-img">
+        <div class="hero-typing-badge"><span id="typingBadge"></span><span class="cursor">|</span></div>
+      </div></div>
+    </section>
+
+    <div class="stats-bar fade-up">
+      <div class="stat-cell"><div class="stat-label">Born In</div><div class="stat-value">Philippines</div></div>
+      <div class="stat-cell"><div class="stat-label">Experience</div><div class="stat-value">3+ Years</div></div>
+      <div class="stat-cell"><div class="stat-label">Projects</div><div class="stat-value">5+</div></div>
+      <div class="stat-cell"><div class="stat-label">University</div><div class="stat-value">DLSU</div></div>
+    </div>
+
+    <section id="about-intro" class="card-section about-intro-card fade-up">
+      <div><div class="about-name"><span>I'm</span>Bianca<br>Manganaan</div></div>
+      <div class="about-text">Hello! I'm an aspiring Computer Engineer and Cybersecurity enthusiast from <strong>De La Salle University.</strong> I am dedicated to building secure, resilient systems and constantly expanding my technical horizons. With over <strong>3 years of academic experience,</strong> I blend my love for technology with creative pursuits in film, photography, and video editing.</div>
+    </section>
+
+    <section id="about" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">About Me</h2>
+      <p class="section-subtitle fade-up-child">Aspiring Computer Engineer & Cybersecurity enthusiast</p>
+      <div class="detail-grid">
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>Birthday:</strong> 3 July, 2004</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>Degree:</strong> BS Computer Engineering minor in Cybersecurity</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>Phone:</strong> +63 956 085 3210</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>Email:</strong> bianca_manganaan@dlsu.edu.ph</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>City:</strong> Imus City, Philippines</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>University:</strong> De La Salle University Manila</span></div>
+      </div>
+      <p class="fade-up-child">Beyond the world of circuits and code, I am deeply passionate about the arts. I express my creativity through film, photography, and video editing — hobbies that have taught me that attention to detail is just as important in art as it is in cybersecurity. To keep my mind sharp and my body active, I play badminton, which helps me maintain focus and discipline.</p>
+      <div class="skills-section" id="skillsSection">
+        <div class="skill-bar fade-up-child"><div class="skill-name"><span>HTML</span><span>90%</span></div><div class="bar"><div class="bar-fill" data-width="90"></div></div></div>
+        <div class="skill-bar fade-up-child"><div class="skill-name"><span>CSS</span><span>85%</span></div><div class="bar"><div class="bar-fill" data-width="85"></div></div></div>
+        <div class="skill-bar fade-up-child"><div class="skill-name"><span>JavaScript</span><span>75%</span></div><div class="bar"><div class="bar-fill" data-width="75"></div></div></div>
+        <div class="skill-bar fade-up-child"><div class="skill-name"><span>React.JS</span><span>60%</span></div><div class="bar"><div class="bar-fill" data-width="60"></div></div></div>
+      </div>
+      <div class="hobbies-row fade-up-child">
+        <div class="hobby-tag"><i class="bi bi-book"></i>Reading</div><div class="hobby-tag"><i class="bi bi-music-note-beamed"></i>Music</div><div class="hobby-tag"><i class="bi bi-controller"></i>Gaming</div><div class="hobby-tag"><i class="bi bi-cpu"></i>Tech</div><div class="hobby-tag"><i class="bi bi-camera"></i>Photography</div><div class="hobby-tag"><i class="bi bi-film"></i>Film</div>
+      </div>
+      <div class="resume-btns fade-up-child">
+        <a href="resume/resume.html" target="_blank" class="btn-outline"><i class="bi bi-file-earmark-person"></i> View Full Resume</a>
+        <a href="#contact" class="btn-solid"><i class="bi bi-send-fill"></i> Hire Me Now</a>
+      </div>
+    </section>
+
+    <section id="works" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">Works</h2>
+      <p class="section-subtitle fade-up-child">A showcase of my academic projects and personal works</p>
+      <div class="works-grid">
+        <div class="work-card fade-up-child"><img src="assets/pokemon.png" alt=""><div class="work-card-body"><h4>UDP Pokemon Game</h4><p>Designed and implemented a multiplayer Pokemon game using UDP networking</p></div></div>
+        <div class="work-card fade-up-child"><img src="assets/payroll.jpg" alt=""><div class="work-card-body"><h4>Payroll Management System</h4><p>Comprehensive payroll system with employee data handling and salary calculations</p></div></div>
+        <div class="work-card fade-up-child"><img src="assets/voltage.png" alt=""><div class="work-card-body"><h4>Voltage Regulator</h4><p>Designed and implemented a voltage regulator circuit using operational amplifiers</p></div></div>
+      </div>
+    </section>
+
+    <section id="experience" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">Experience</h2>
+      <p class="section-subtitle fade-up-child">My professional and project experience</p>
+      <div class="exp-grid">
+        <div class="exp-column"><h3 class="fade-up-child">Professional Experience</h3>
+          <div class="exp-item fade-up-child"><div class="date">2024 – Present</div><h4>Head of Finance</h4><div class="company">DLSU Badminton Society</div><ul><li>Manage the organization's budget, oversee financial transactions</li><li>Prepare financial reports and statements</li></ul></div>
+          <div class="exp-item fade-up-child"><div class="date">2023 – Present</div><h4>Marketing Officer</h4><div class="company">ELM Marketing, Philippines</div><ul><li>Develops website front-end architecture for responsiveness</li><li>Collaborates with designers for web design features</li><li>Creates publications and marketing materials</li></ul></div>
+          <div class="exp-item fade-up-child"><div class="date">2023 – Present</div><h4>Freelance Video Editor</h4><div class="company">Self-Employed</div><ul><li>Edit videos using Adobe Premiere Pro and After Effects</li><li>Collaborate with clients to deliver high-quality content</li></ul></div>
+        </div>
+        <div class="exp-column"><h3 class="fade-up-child">Project Experience</h3>
+          <div class="exp-item fade-up-child"><div class="date">2025</div><h4>UDP Pokemon Game</h4><div class="company">Academic Project</div><ul><li>Multiplayer Pokemon game using UDP networking</li><li>Used Unity, C#, and networking protocols</li><li>Led the networking implementation</li></ul></div>
+          <div class="exp-item fade-up-child"><div class="date">2023</div><h4>Payroll Management System</h4><div class="company">Academic Project</div><ul><li>Employee data handling and salary calculations</li><li>C# and SQL for database management</li><li>Managed database schema and backend logic</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">Education</h2>
+      <p class="section-subtitle fade-up-child">My academic background and qualifications</p>
+      <div class="edu-timeline">
+        <div class="edu-item fade-up-child"><div class="date">2021 – Present</div><h4>BS Computer Engineering minor in Cybersecurity</h4><div class="school">De La Salle University Manila</div><p>Relevant coursework: Data Structures and Algorithms, Digital Systems Design, Electronics Engineering, Computer Networks, Database Management, Machine Learning Fundamentals.</p><ul><li>Dean's Lister</li><li>Scholarship Recipient</li><li>Member of DLSU Badminton Society</li></ul></div>
+        <div class="edu-item fade-up-child"><div class="date">2020 – 2023</div><h4>Senior High School — ICT Strand</h4><div class="school">De La Salle University Dasmariñas</div><p>Graduated with Highest Honors. Focused on Information and Communication Technology.</p><ul><li>Highest Honors</li><li>Active member of Student Government</li><li>Badminton Varsity Player</li></ul></div>
+        <div class="edu-item fade-up-child"><div class="date">2016 – 2020</div><h4>Junior High School</h4><div class="school">Benedictine Institute of Learning</div><p>Completed basic education with High Honors.</p><ul><li>High Honors</li><li>VP of Student Government (2019-2020)</li><li>Student Photojournalist — School Publication (2018-2020)</li><li>VP of IT Club</li><li>Badminton Varsity Player</li></ul></div>
+      </div>
+    </section>
+
+    <section id="references" class="card-section fade-up">
+      <div class="testimonial-header fade-up-child"><h2>My <em>References</em> vouch for me,<br>I'm <strong>Confident You Will Too!</strong></h2><p>Professional references who can attest to my skills, character, and work ethic.</p></div>
+      <div class="slider-wrap fade-up-child">
+        <div class="slider-track" id="sliderTrack">
+          <div class="slide"><div class="slide-inner"><img src="assets/person1.jpg" alt=""><div><div class="quote-icon">66</div><div class="quote">"Bianca is an exceptionally dedicated student with a sharp aptitude for cybersecurity concepts. She consistently demonstrates a strong grasp of network protocols and an ability to solve complex technical problems."</div><div class="slider-name">Engr. Rafael S. Diaz, PhD</div><div class="slider-role">Professor, Computer Engineering Dept.</div><div class="ref-contact" style="margin-top:8px"><i class="bi bi-envelope"></i> rafael.diaz@dlsu.edu.ph &nbsp; <i class="bi bi-telephone"></i> +63 917 123 4567</div></div></div></div>
+          <div class="slide"><div class="slide-inner"><img src="assets/person2.jpg" alt=""><div><div class="quote-icon">66</div><div class="quote">"During her internship, Bianca displayed a professional work ethic and a keen eye for detail. She adapts quickly to new security tools and communicates complex ideas with clarity."</div><div class="slider-name">Ms. Clarissa V. Tan</div><div class="slider-role">Senior Cybersecurity Analyst / Internship Supervisor</div><div class="ref-contact" style="margin-top:8px"><i class="bi bi-envelope"></i> c.tan@technetworks.com &nbsp; <i class="bi bi-telephone"></i> +63 918 987 6543</div></div></div></div>
+          <div class="slide"><div class="slide-inner"><img src="assets/person3.jpg" alt=""><div><div class="quote-icon">66</div><div class="quote">"I mentored Bianca during her final project. She stands out for her ability to merge creative thinking with technical engineering. She is reliable, innovative, and a strong team player."</div><div class="slider-name">Mr. Gabriel A. Lim</div><div class="slider-role">Capstone Project Adviser</div><div class="ref-contact" style="margin-top:8px"><i class="bi bi-envelope"></i> gabriel.lim@dlsu.edu.ph &nbsp; <i class="bi bi-telephone"></i> +63 922 555 1234</div></div></div></div>
+        </div>
+        <div class="slider-dots" id="sliderDots"><button class="slider-dot active" data-slide="0"></button><button class="slider-dot" data-slide="1"></button><button class="slider-dot" data-slide="2"></button></div>
+      </div>
+    </section>
+
+    <section id="contact" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">Contact</h2>
+      <p class="section-subtitle fade-up-child">Get in touch — I'd love to hear from you</p>
+      <div class="contact-grid">
+        <div class="contact-info-list">
+          <div class="contact-info-item fade-up-child"><i class="bi bi-geo-alt"></i><div><h4>Address</h4><p>Manila, Philippines</p></div></div>
+          <div class="contact-info-item fade-up-child"><i class="bi bi-telephone"></i><div><h4>Call Me</h4><p>+63 956 085 3210</p></div></div>
+          <div class="contact-info-item fade-up-child"><i class="bi bi-envelope"></i><div><h4>Email Me</h4><p>bianca_manganaan@dlsu.edu.ph</p></div></div>
+          <div class="contact-info-item fade-up-child"><i class="bi bi-clock"></i><div><h4>Response Time</h4><p>Within 24-48 hours</p></div></div>
+        </div>
+        <div class="contact-form fade-up-child">
+          <div class="form-row">
+            <div class="form-group"><label>Name <span class="required">*</span></label><input type="text" placeholder="Your Full Name" required></div>
+            <div class="form-group"><label>Email <span class="required">*</span></label><input type="email" placeholder="Your Email Address" required></div>
+          </div>
+          <div class="form-group"><label>Subject <span class="required">*</span></label><input type="text" placeholder="Your Subject" required></div>
+          <div class="form-group"><label>Message <span class="required">*</span></label><textarea placeholder="Write Your Message..." required></textarea></div>
+          <div class="fieldset-wrap"><legend>I'm interested in:</legend><div class="check-group">
+            <label class="check-item"><input type="checkbox">Web Development</label><label class="check-item"><input type="checkbox">Mobile Development</label><label class="check-item"><input type="checkbox">Data Analysis</label><label class="check-item"><input type="checkbox">Electronics/Hardware</label>
+          </div></div>
+          <button type="button" class="submit-btn" id="submitBtn">Send Message <i class="bi bi-arrow-return-left"></i></button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+<script src="script.js"></script>
+</body>
+</html>
