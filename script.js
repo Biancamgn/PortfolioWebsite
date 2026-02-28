@@ -173,4 +173,67 @@ auto=setInterval(()=>go((cur+1)%tot),5000)})();
 window.addEventListener('scroll',()=>{document.getElementById('backToTop').classList.toggle('show',scrollY>400)});
 
 // ═══ FORM ═══
-document.getElementById('submitBtn').addEventListener('click',function(){const f=this.closest('.contact-form'),ins=f.querySelectorAll('input,select,textarea');let d={};ins.forEach(i=>{if(i.type==='checkbox'){if(!d.interests)d.interests=[];if(i.checked)d.interests.push(i.parentElement.textContent.trim())}else d[i.placeholder||'f']=i.value});console.log('=== Form ===',d);alert('Thank you! Your message has been received.');ins.forEach(i=>{if(i.type==='checkbox')i.checked=false;else i.value=''})});
+const form = document.getElementById("contactForm");
+const emailField = document.querySelector("input[name='email']");
+const messageField = document.querySelector("textarea[name='message']");
+
+// 1. Time-based Filtering setup
+const formLoadTime = Date.now();
+function isTooFast() {
+  const submitTime = Date.now();
+  const secondsTaken = (submitTime - formLoadTime) / 1000;
+  return secondsTaken < 2;
+}
+
+// 2. Rate Limiting setup
+let submitTimes = [];
+function isRateLimited() {
+  const now = Date.now();
+  submitTimes = submitTimes.filter(time => now - time < 60000);
+  if (submitTimes.length >= 3) {
+    return true;
+  }
+  submitTimes.push(now);
+  return false;
+}
+
+// 3. Spam Keyword Detection setup
+const spamWords = ["free money", "buy now", "click here", "subscribe", "promo"];
+function containsSpam(message) {
+  const lowerMessage = message.toLowerCase();
+  return spamWords.some(word => lowerMessage.includes(word));
+}
+
+if (form) {
+  form.addEventListener("submit", function (e) {
+    // Check 1: Basic Email Validation
+    if (!emailField.value.includes("@")) {
+      alert("Enter a valid email address.");
+      e.preventDefault();
+      return;
+    }
+
+    // Check 2: Time-based Filtering (Bot trap)
+    if (isTooFast()) {
+      e.preventDefault();
+      alert("Submission was too fast. Please try again.");
+      return;
+    }
+
+    // Check 3: Rate Limiting
+    if (isRateLimited()) {
+      e.preventDefault();
+      alert("Too many submissions. Please wait a minute.");
+      return;
+    }
+
+    // Check 4: Spam Keyword Detection
+    if (containsSpam(messageField.value)) {
+      e.preventDefault();
+      alert("Your message contains blocked spam keywords.");
+      return;
+    }
+
+    // If all checks pass, the form will naturally submit to FormSubmit.co
+  });
+}
