@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bianca Manganaan — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0d0b;
+  --card:#1a1714;
+  --card-lighter:#221f1a;
+  --orange:#d4874d;
+  --orange-glow:#e8995a;
+  --orange-dim:#a66a3a;
+  --cream:#f5e6d3;
+  --text:#c4b5a3;
+  --text-dim:#8a7e70;
+  --white:#faf3eb;
+  --border:rgba(212,135,77,0.18);
+  --dash-border:1.5px dashed rgba(212,135,77,0.22);
+  --radius:16px;
+  --radius-sm:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+#spiderCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+h1,h2,h3,h4,h5{font-family:'Playfair Display',serif;color:var(--cream);font-weight:600}
+a{color:var(--orange);text-decoration:none;transition:all .3s}
+a:hover{color:var(--orange-glow)}
+::selection{background:var(--orange);color:var(--bg)}
+
+/* ═══ LOADING SCREEN ═══ */
+.loader-screen{
+  position:fixed;inset:0;z-index:9999;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  transition:opacity .8s,visibility .8s;
+}
+.loader-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+
+/* Welcome text */
+.loader-welcome{
+  font-family:'Playfair Display',serif;font-size:42px;color:var(--cream);
+  opacity:0;transition:opacity .8s;position:absolute;letter-spacing:2px;
+}
+.loader-welcome.show{opacity:1}
+
+/* Clock container */
+.loader-clock-wrap{
+  opacity:0;transition:opacity .8s;
+  display:flex;flex-direction:column;align-items:center;gap:24px;
+}
+.loader-clock-wrap.show{opacity:1}
+
+.loader-date-text{
+  font-family:'Playfair Display',serif;font-size:20px;color:var(--cream);
+  letter-spacing:1px;opacity:.9;
+}
+
+/* Glassmorphism clock */
+.clock-container{
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+/* Decorative blobs */
+.clock-blob{
+  position:absolute;border-radius:50%;filter:blur(2px);z-index:0;
+}
+.clock-blob.blob-1{
+  width:100px;height:100px;
+  background:linear-gradient(135deg,var(--orange),#e85d3a);
+  bottom:-20px;left:-30px;
+}
+.clock-blob.blob-2{
+  width:90px;height:90px;
+  background:linear-gradient(135deg,var(--orange-glow),#d4874d);
+  top:-20px;right:-20px;
+}
+
+.clock-glass{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:8px;
+  padding:20px 28px;
+  background:rgba(26,23,20,0.55);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(212,135,77,0.15);
+  border-radius:18px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.3);
+}
+
+.clock-digit-box{
+  background:rgba(26,23,20,0.6);
+  border:1px solid rgba(212,135,77,0.12);
+  border-radius:12px;
+  padding:12px 18px;
+  min-width:72px;
+  text-align:center;
+}
+.clock-digit{
+  font-family:'DM Sans',sans-serif;
+  font-size:44px;font-weight:700;
+  color:var(--white);line-height:1;
+  letter-spacing:1px;
+}
+.clock-colon{
+  font-family:'DM Sans',sans-serif;
+  font-size:36px;font-weight:700;
+  color:rgba(212,135,77,0.5);line-height:1;
+  margin:0 2px;
+}
+.clock-ampm-box{
+  background:rgba(212,135,77,0.12);
+  border:1px solid rgba(212,135,77,0.2);
+  border-radius:10px;
+  padding:8px 14px;
+  margin-left:6px;
+}
+.clock-ampm{
+  font-family:'DM Sans',sans-serif;
+  font-size:16px;font-weight:700;
+  color:var(--orange);line-height:1;
+  letter-spacing:1px;
+}
+
+.loader-enter-text{
+  font-size:13px;color:var(--text-dim);letter-spacing:2px;
+  text-transform:uppercase;opacity:0;transition:opacity .6s;margin-top:8px;
+}
+.loader-enter-text.show{opacity:1;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ═══ TOP HEADER ═══ */
+.top-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,13,11,0.85);backdrop-filter:blur(20px);border-bottom:var(--dash-border);padding:0 40px;height:70px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--orange),var(--orange-dim));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:20px;color:var(--bg)}
+.brand-name{font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);font-weight:600}
+.hire-top-btn{padding:10px 28px;border:var(--dash-border);border-radius:50px;color:var(--orange);font-weight:500;font-size:14px;letter-spacing:.5px;display:flex;align-items:center;gap:8px;transition:all .3s;background:transparent}
+.hire-top-btn:hover{background:rgba(212,135,77,0.08)}
+
+/* ═══ GRID ═══ */
+.site-wrapper{margin-top:70px;padding:24px;display:grid;grid-template-columns:280px 1fr;gap:24px;max-width:1400px;margin-left:auto;margin-right:auto;position:relative;z-index:1}
+
+/* ═══ LEFT COLUMN ═══ */
+.left-column{position:sticky;top:94px;height:fit-content;display:flex;flex-direction:column;gap:20px}
+.sidebar-nav{background:var(--card);border:var(--dash-border);border-radius:var(--radius);padding:20px}
+.sidebar-nav ul{list-style:none}
+.sidebar-nav li{margin-bottom:2px}
+.sidebar-nav a{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:var(--radius-sm);color:var(--text-dim);font-size:14px;font-weight:500;letter-spacing:.4px;text-transform:uppercase;transition:all .3s;border:1.5px solid transparent}
+.sidebar-nav a i{font-size:16px;opacity:.6;transition:all .3s}
+.sidebar-nav a:hover{background:rgba(212,135,77,0.06);color:var(--cream)}
+.sidebar-nav a.active{border:var(--dash-border);background:rgba(212,135,77,0.04);color:var(--orange)}
+.sidebar-nav a.active i,.sidebar-nav a:hover i{opacity:1;color:var(--orange)}
+
+.sidebar-contact{background:var(--card);border:var(--dash-border);border-radius:var(--radius);padding:24px}
+.sidebar-contact .sc-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:4px}
+.sidebar-contact .sc-value{font-size:15px;color:var(--cream);margin-bottom:16px;font-weight:500}
+.sidebar-contact .sc-value:last-of-type{margin-bottom:12px}
+.social-row{display:flex;gap:10px;margin-top:4px}
+.social-row a{width:36px;height:36px;border-radius:50%;border:var(--dash-border);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:14px;transition:all .3s}
+.social-row a:hover{border-color:var(--orange);color:var(--orange);background:rgba(212,135,77,0.08)}
+
+/* ═══ MAIN CONTENT ═══ */
+.main-content{display:flex;flex-direction:column;gap:24px}
+.card-section{background:var(--card);border:var(--dash-border);border-radius:var(--radius);padding:40px;transition:all .4s}
+.card-section:hover{border-color:rgba(212,135,77,0.35)}
+
+.hero-card{display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:center;min-height:380px}
+.hero-greeting{color:var(--orange);font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.hero-title{font-size:48px;line-height:1.15;margin-bottom:20px;color:var(--white)}
+.hero-title em{font-style:italic;color:var(--orange)}
+.hero-desc{font-size:15px;line-height:1.8;max-width:520px;margin-bottom:30px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-outline{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;border:var(--dash-border);border-radius:50px;color:var(--orange);font-weight:500;font-size:14px;transition:all .3s;background:transparent}
+.btn-outline:hover{background:rgba(212,135,77,0.08)}
+.btn-solid{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:var(--orange);border:none;border-radius:50px;color:var(--bg);font-weight:600;font-size:14px;transition:all .3s}
+.btn-solid:hover{background:var(--orange-glow);transform:translateY(-2px);color:var(--bg)}
+.hero-img-wrap{display:flex;justify-content:center;align-items:center}
+.hero-img-container{position:relative;text-align:center}
+.hero-img{width:260px;height:260px;border-radius:50%;object-fit:cover;border:3px dashed var(--orange-dim);box-shadow:0 0 60px rgba(212,135,77,0.15)}
+.hero-typing-badge{margin-top:14px;text-align:center;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;min-height:20px}
+.hero-typing-badge .cursor{animation:blink .7s step-end infinite;color:var(--orange)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.stats-bar{background:var(--card);border:var(--dash-border);border-radius:var(--radius);display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden}
+.stat-cell{padding:24px;text-align:center;border-right:1px solid rgba(212,135,77,0.12)}
+.stat-cell:last-child{border-right:none}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--orange);font-weight:600;margin-bottom:8px}
+.stat-value{font-family:'Playfair Display',serif;font-size:24px;color:var(--cream);font-weight:700}
+
+.about-intro-card{display:grid;grid-template-columns:auto 1fr;gap:24px}
+.about-name{font-size:42px;font-family:'Playfair Display',serif;color:var(--cream);line-height:1.1}
+.about-name span{display:block;font-size:16px;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-weight:400;margin-bottom:6px}
+.about-text{font-size:15px;line-height:1.8}
+.about-text strong{color:var(--cream);font-weight:600}
+
+.section-title{font-size:32px;margin-bottom:8px;position:relative;display:inline-block}
+.section-title::after{content:'';position:absolute;bottom:-6px;left:0;width:40px;height:3px;background:var(--orange);border-radius:2px}
+.section-subtitle{color:var(--text-dim);font-size:14px;margin-bottom:32px;margin-top:12px}
+
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 30px;margin:28px 0}
+.detail-item{display:flex;gap:8px;font-size:14px}
+.detail-item .bi{color:var(--orange);font-size:12px;margin-top:4px}
+.detail-item strong{color:var(--cream);font-weight:500}
+.resume-btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px}
+
+.skills-section{margin:28px 0}
+.skill-bar{margin-bottom:14px}
+.skill-bar .skill-name{font-size:13px;color:var(--cream);margin-bottom:4px;display:flex;justify-content:space-between}
+.skill-bar .bar{height:4px;background:var(--card-lighter);border-radius:4px;overflow:hidden}
+.skill-bar .bar-fill{height:100%;background:linear-gradient(90deg,var(--orange-dim),var(--orange));border-radius:4px;width:0;transition:width 1.5s ease}
+.hobbies-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+.hobby-tag{display:flex;align-items:center;gap:8px;padding:8px 18px;background:rgba(212,135,77,0.06);border:var(--dash-border);border-radius:50px;font-size:13px;color:var(--text-dim)}
+.hobby-tag i{color:var(--orange)}
+
+.works-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.work-card{background:var(--card-lighter);border:var(--dash-border);border-radius:var(--radius-sm);overflow:hidden;transition:all .4s}
+.work-card:hover{transform:translateY(-4px);border-color:var(--orange)}
+.work-card img{width:100%;height:180px;object-fit:cover;display:block}
+.work-card-body{padding:20px}
+.work-card-body h4{font-size:17px;margin-bottom:8px}
+.work-card-body p{font-size:13px;color:var(--text-dim);line-height:1.6}
+
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.exp-column h3{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--orange);font-weight:600;margin-bottom:20px;font-family:'DM Sans',sans-serif}
+.exp-item{padding:24px;background:var(--card-lighter);border:var(--dash-border);border-radius:var(--radius-sm);margin-bottom:16px;border-left:3px solid var(--orange);transition:all .3s}
+.exp-item:hover{border-color:var(--orange)}
+.exp-item h4{font-size:17px;margin-bottom:4px}
+.exp-item .date{font-size:12px;color:var(--orange);font-weight:600;letter-spacing:.5px;margin-bottom:6px}
+.exp-item .company{font-style:italic;color:var(--text-dim);font-size:14px;margin-bottom:10px}
+.exp-item ul{list-style:none;padding:0}
+.exp-item ul li{font-size:13px;padding:3px 0;color:var(--text-dim);position:relative;padding-left:16px}
+.exp-item ul li::before{content:'›';position:absolute;left:0;color:var(--orange);font-weight:700}
+
+.edu-timeline{position:relative;padding-left:30px}
+.edu-timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:0;border-left:2px dashed rgba(212,135,77,0.18)}
+.edu-item{position:relative;margin-bottom:28px}
+.edu-item::before{content:'';position:absolute;left:-26px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--orange);border:2px solid var(--bg)}
+.edu-item h4{font-size:17px;margin-bottom:2px}
+.edu-item .date{font-size:12px;color:var(--orange);font-weight:600;margin-bottom:6px}
+.edu-item .school{font-style:italic;color:var(--text-dim);font-size:14px;margin-bottom:6px}
+.edu-item p{font-size:13px;color:var(--text-dim);margin-bottom:6px}
+.edu-item ul{list-style:none;padding:0}
+.edu-item ul li{font-size:13px;color:var(--text-dim);padding:2px 0;padding-left:16px;position:relative}
+.edu-item ul li::before{content:'✦';position:absolute;left:0;color:var(--orange);font-size:8px;top:5px}
+
+.testimonial-header{margin-bottom:30px}
+.testimonial-header h2{font-size:32px;margin-bottom:4px}
+.testimonial-header h2 em{color:var(--orange);font-style:italic}
+.testimonial-header p{font-size:14px;color:var(--text-dim);margin-top:8px}
+.slider-wrap{position:relative;overflow:hidden}
+.slider-track{display:flex;transition:transform .5s ease}
+.slide{min-width:100%;padding:0 10px;box-sizing:border-box}
+.slide-inner{display:flex;gap:24px;padding:30px;border:var(--dash-border);border-radius:var(--radius-sm);background:var(--card-lighter);position:relative}
+.slide-inner img{width:100px;height:120px;border-radius:var(--radius-sm);object-fit:cover;flex-shrink:0}
+.slide-inner .quote-icon{position:absolute;top:20px;right:24px;font-family:'Playfair Display',serif;font-size:48px;color:rgba(212,135,77,0.15);line-height:1}
+.slide-inner .quote{font-size:14px;font-style:italic;color:var(--text-dim);line-height:1.7;margin-bottom:10px}
+.slider-name{font-size:15px;color:var(--cream);font-weight:600;margin-top:10px}
+.slider-role{font-size:12px;color:var(--text-dim)}
+.ref-contact{font-size:12px;color:var(--text-dim)}
+.ref-contact i{color:var(--orange);margin-right:4px}
+.slider-dots{display:flex;gap:8px;justify-content:center;margin-top:24px}
+.slider-dot{width:10px;height:10px;border-radius:50%;background:rgba(212,135,77,0.15);border:none;cursor:pointer;transition:all .3s;padding:0}
+.slider-dot.active{background:var(--orange);width:28px;border-radius:10px}
+
+.contact-grid{display:grid;grid-template-columns:300px 1fr;gap:30px}
+.contact-info-list{display:flex;flex-direction:column;gap:20px}
+.contact-info-item{display:flex;gap:14px;align-items:flex-start}
+.contact-info-item i{font-size:20px;color:var(--orange);margin-top:2px}
+.contact-info-item h4{font-size:14px;color:var(--cream);margin-bottom:2px;font-family:'DM Sans',sans-serif;font-weight:600}
+.contact-info-item p{font-size:13px;color:var(--text-dim)}
+.contact-form .form-group{position:relative;margin-bottom:20px}
+.contact-form .form-group input,.contact-form .form-group select,.contact-form .form-group textarea{width:100%;padding:16px 16px 10px;background:transparent;border:var(--dash-border);border-radius:var(--radius-sm);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:all .3s}
+.contact-form .form-group input:focus,.contact-form .form-group select:focus,.contact-form .form-group textarea:focus{border-color:var(--orange)}
+.contact-form .form-group label{position:absolute;left:14px;top:-9px;background:var(--card);padding:0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);font-weight:500;pointer-events:none}
+.contact-form .form-group label .required{color:var(--orange)}
+.contact-form textarea{min-height:120px;resize:vertical}
+.contact-form select{cursor:pointer;appearance:none}
+.contact-form select option{background:var(--card);color:var(--cream)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fieldset-wrap{margin-bottom:20px;border:var(--dash-border);border-radius:var(--radius-sm);padding:16px;position:relative}
+.fieldset-wrap legend{position:absolute;top:-9px;left:14px;background:var(--card);padding:0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);font-weight:500}
+.check-group{display:flex;flex-wrap:wrap;gap:16px;padding-top:6px}
+.check-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-dim);cursor:pointer}
+.check-item input[type=checkbox]{accent-color:var(--orange);cursor:pointer}
+.submit-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 36px;border:var(--dash-border);background:transparent;border-radius:50px;font-weight:500;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .3s;color:var(--orange)}
+.submit-btn:hover{background:rgba(212,135,77,0.08)}
+
+.site-footer{grid-column:1/-1;background:var(--card);border:var(--dash-border);border-radius:var(--radius);padding:18px 30px;display:flex;align-items:center;justify-content:space-between}
+.site-footer .copy{font-size:12px;color:var(--text-dim)}
+.site-footer .foot-links{display:flex;gap:20px}
+.site-footer .foot-links a{font-size:12px;color:var(--text-dim);transition:all .3s}
+.site-footer .foot-links a:hover{color:var(--orange)}
+
+.back-to-top{position:fixed;bottom:30px;right:30px;z-index:99;width:44px;height:44px;border:var(--dash-border);border-radius:8px;background:rgba(15,13,11,0.85);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:18px;cursor:pointer;opacity:0;visibility:hidden;transition:all .3s}
+.back-to-top.show{opacity:1;visibility:visible}
+.back-to-top:hover{background:rgba(212,135,77,0.1);border-color:var(--orange)}
+
+.fade-up{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+.fade-up-child{opacity:0;transform:translateY(30px);transition:opacity .5s ease,transform .5s ease}
+.fade-up-child.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:1024px){.site-wrapper{grid-template-columns:1fr}.left-column{position:static;display:grid;grid-template-columns:1fr 1fr;gap:16px}.sidebar-nav{overflow-x:auto}.sidebar-nav ul{display:flex;gap:4px;width:100%}.sidebar-nav li{white-space:nowrap}.hero-card{grid-template-columns:1fr;text-align:center}.hero-img-wrap{order:-1}.hero-title{font-size:36px}.hero-btns{justify-content:center}.exp-grid,.contact-grid{grid-template-columns:1fr}.works-grid{grid-template-columns:1fr 1fr}.about-intro-card{grid-template-columns:1fr}.stats-bar{grid-template-columns:1fr 1fr}.site-footer{flex-direction:column;gap:8px;text-align:center}}
+@media(max-width:600px){.works-grid,.form-row,.detail-grid,.stats-bar{grid-template-columns:1fr}.hero-title{font-size:28px}.card-section{padding:24px}.left-column{grid-template-columns:1fr}.clock-digit{font-size:32px}.clock-digit-box{min-width:56px;padding:10px 14px}.clock-glass{padding:16px 20px}}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOADING SCREEN ═══ -->
+<div class="loader-screen" id="loaderScreen">
+  <!-- Phase 1: Welcome -->
+  <div class="loader-welcome" id="loaderWelcome">Welcome</div>
+  <!-- Phase 2: Date + Clock -->
+  <div class="loader-clock-wrap" id="loaderClockWrap">
+    <div class="loader-date-text" id="loaderDateText"></div>
+    <div class="clock-container">
+      <div class="clock-blob blob-1"></div>
+      <div class="clock-blob blob-2"></div>
+      <div class="clock-glass">
+        <div class="clock-digit-box"><div class="clock-digit" id="clockHr">00</div></div>
+        <div class="clock-colon">:</div>
+        <div class="clock-digit-box"><div class="clock-digit" id="clockMin">00</div></div>
+        <div class="clock-colon">:</div>
+        <div class="clock-digit-box"><div class="clock-digit" id="clockSec">00</div></div>
+        <div class="clock-ampm-box"><div class="clock-ampm" id="clockAmpm">AM</div></div>
+      </div>
+    </div>
+    <div class="loader-enter-text" id="loaderEnter">Click anywhere to enter</div>
+  </div>
+</div>
+
+<canvas id="spiderCanvas"></canvas>
+
+<div class="top-header">
+  <div class="brand"><div class="brand-icon">B</div><span class="brand-name">Bianca Manganaan</span></div>
+  <a href="#contact" class="hire-top-btn"><i class="bi bi-send"></i> Hire Me</a>
+</div>
+
+<div class="site-wrapper">
+  <div class="left-column">
+    <nav class="sidebar-nav">
+      <ul>
+        <li><a href="#home" class="active" data-section="home">Home <i class="bi bi-house"></i></a></li>
+        <li><a href="#about" data-section="about">About Me <i class="bi bi-person"></i></a></li>
+        <li><a href="#works" data-section="works">Works <i class="bi bi-grid"></i></a></li>
+        <li><a href="#experience" data-section="experience">Experience <i class="bi bi-briefcase"></i></a></li>
+        <li><a href="#education" data-section="education">Education <i class="bi bi-mortarboard"></i></a></li>
+        <li><a href="#references" data-section="references">Testimonial <i class="bi bi-star"></i></a></li>
+        <li><a href="#contact" data-section="contact">Contact <i class="bi bi-envelope"></i></a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-contact">
+      <div class="sc-label">Phone:</div>
+      <div class="sc-value">+63 956 085 3210</div>
+      <div class="sc-label">Email:</div>
+      <div class="sc-value">bianca_manganaan@dlsu.edu.ph</div>
+      <div class="social-row">
+        <a href="#"><i class="bi bi-facebook"></i></a><a href="#"><i class="bi bi-instagram"></i></a><a href="#"><i class="bi bi-github"></i></a><a href="#"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <section id="home" class="card-section hero-card fade-up">
+      <div>
+        <div class="hero-greeting">Hi there! <span>👋</span></div>
+        <h1 class="hero-title">Computer Engineering &amp;<br><em>Cybersecurity</em> Student.</h1>
+        <p class="hero-desc">I am a dedicated Computer Engineering student from De La Salle University, passionate about building secure systems and turning creative ideas into innovative digital solutions.</p>
+        <div class="hero-btns">
+          <a href="resume/resume.html" target="_blank" class="btn-outline"><i class="bi bi-file-earmark-person"></i> View Resume</a>
+          <a href="#contact" class="btn-solid"><i class="bi bi-send-fill"></i> Hire Me Now</a>
+        </div>
+      </div>
+      <div class="hero-img-wrap"><div class="hero-img-container">
+        <img src="assets/profile.jpg" alt="Bianca Manganaan" class="hero-img">
+        <div class="hero-typing-badge"><span id="typingBadge"></span><span class="cursor">|</span></div>
+      </div></div>
+    </section>
+
+    <div class="stats-bar fade-up">
+      <div class="stat-cell"><div class="stat-label">Born In</div><div class="stat-value">Imus City, PH</div></div>
+      <div class="stat-cell"><div class="stat-label">Experience</div><div class="stat-value">3+ Years</div></div>
+      <div class="stat-cell"><div class="stat-label">Projects</div><div class="stat-value">5+</div></div>
+      <div class="stat-cell"><div class="stat-label">University</div><div class="stat-value">DLSU</div></div>
+    </div>
+
+    <section id="about-intro" class="card-section about-intro-card fade-up">
+      <div><div class="about-name"><span>I'm</span>Bianca<br>Manganaan</div></div>
+      <div class="about-text">Hello! <strong>I'm Bianca,</strong> an aspiring Computer Engineer and Cybersecurity enthusiast from <strong>De La Salle University.</strong> I am dedicated to building secure, resilient systems and constantly expanding my technical horizons. With over <strong>3 years of academic experience,</strong> I blend my love for technology with creative pursuits in film, photography, and video editing.</div>
+    </section>
+
+    <section id="about" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">About Me</h2>
+      <p class="section-subtitle fade-up-child">Aspiring Computer Engineer & Cybersecurity enthusiast</p>
+      <div class="detail-grid">
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>Birthday:</strong> 3 July, 2004</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>Degree:</strong> BS Computer Engineering minor in Cybersecurity</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>Phone:</strong> +63 956 085 3210</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>Email:</strong> bianca_manganaan@dlsu.edu.ph</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>City:</strong> Imus City, Philippines</span></div>
+        <div class="detail-item fade-up-child"><i class="bi bi-chevron-right"></i><span><strong>University:</strong> De La Salle University Manila</span></div>
+      </div>
+      <p class="fade-up-child">Beyond the world of circuits and code, I am deeply passionate about the arts. I express my creativity through film, photography, and video editing — hobbies that have taught me that attention to detail is just as important in art as it is in cybersecurity. To keep my mind sharp and my body active, I play badminton, which helps me maintain focus and discipline.</p>
+      <div class="skills-section" id="skillsSection">
+        <div class="skill-bar fade-up-child"><div class="skill-name"><span>HTML</span><span>90%</span></div><div class="bar"><div class="bar-fill" data-width="90"></div></div></div>
+        <div class="skill-bar fade-up-child"><div class="skill-name"><span>CSS</span><span>85%</span></div><div class="bar"><div class="bar-fill" data-width="85"></div></div></div>
+        <div class="skill-bar fade-up-child"><div class="skill-name"><span>JavaScript</span><span>75%</span></div><div class="bar"><div class="bar-fill" data-width="75"></div></div></div>
+        <div class="skill-bar fade-up-child"><div class="skill-name"><span>React.JS</span><span>60%</span></div><div class="bar"><div class="bar-fill" data-width="60"></div></div></div>
+      </div>
+      <div class="hobbies-row fade-up-child">
+        <div class="hobby-tag"><i class="bi bi-book"></i>Reading</div><div class="hobby-tag"><i class="bi bi-music-note-beamed"></i>Music</div><div class="hobby-tag"><i class="bi bi-controller"></i>Gaming</div><div class="hobby-tag"><i class="bi bi-cpu"></i>Tech</div><div class="hobby-tag"><i class="bi bi-camera"></i>Photography</div><div class="hobby-tag"><i class="bi bi-film"></i>Film</div>
+      </div>
+      <div class="resume-btns fade-up-child">
+        <a href="resume/resume.html" target="_blank" class="btn-outline"><i class="bi bi-file-earmark-person"></i> View Full Resume</a>
+        <a href="#contact" class="btn-solid"><i class="bi bi-send-fill"></i> Hire Me Now</a>
+      </div>
+    </section>
+
+    <section id="works" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">Works</h2>
+      <p class="section-subtitle fade-up-child">A showcase of my academic projects and personal works</p>
+      <div class="works-grid">
+        <div class="work-card fade-up-child"><img src="assets/pokemon.png" alt=""><div class="work-card-body"><h4>UDP Pokemon Game</h4><p>Designed and implemented a multiplayer Pokemon game using UDP networking</p></div></div>
+        <div class="work-card fade-up-child"><img src="assets/payroll.jpg" alt=""><div class="work-card-body"><h4>Payroll Management System</h4><p>Comprehensive payroll system with employee data handling and salary calculations</p></div></div>
+        <div class="work-card fade-up-child"><img src="assets/voltage.png" alt=""><div class="work-card-body"><h4>Voltage Regulator</h4><p>Designed and implemented a voltage regulator circuit using operational amplifiers</p></div></div>
+      </div>
+    </section>
+
+    <section id="experience" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">Experience</h2>
+      <p class="section-subtitle fade-up-child">My professional and project experience</p>
+      <div class="exp-grid">
+        <div class="exp-column"><h3 class="fade-up-child">Professional Experience</h3>
+          <div class="exp-item fade-up-child"><div class="date">2024 – Present</div><h4>Head of Finance</h4><div class="company">DLSU Badminton Society</div><ul><li>Manage the organization's budget, oversee financial transactions</li><li>Prepare financial reports and statements</li></ul></div>
+          <div class="exp-item fade-up-child"><div class="date">2023 – Present</div><h4>Marketing Officer</h4><div class="company">ELM Marketing, Philippines</div><ul><li>Develops website front-end architecture for responsiveness</li><li>Collaborates with designers for web design features</li><li>Creates publications and marketing materials</li></ul></div>
+          <div class="exp-item fade-up-child"><div class="date">2023 – Present</div><h4>Freelance Video Editor</h4><div class="company">Self-Employed</div><ul><li>Edit videos using Adobe Premiere Pro and After Effects</li><li>Collaborate with clients to deliver high-quality content</li></ul></div>
+        </div>
+        <div class="exp-column"><h3 class="fade-up-child">Project Experience</h3>
+          <div class="exp-item fade-up-child"><div class="date">2025</div><h4>UDP Pokemon Game</h4><div class="company">Academic Project</div><ul><li>Multiplayer Pokemon game using UDP networking</li><li>Used Unity, C#, and networking protocols</li><li>Led the networking implementation</li></ul></div>
+          <div class="exp-item fade-up-child"><div class="date">2023</div><h4>Payroll Management System</h4><div class="company">Academic Project</div><ul><li>Employee data handling and salary calculations</li><li>C# and SQL for database management</li><li>Managed database schema and backend logic</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">Education</h2>
+      <p class="section-subtitle fade-up-child">My academic background and qualifications</p>
+      <div class="edu-timeline">
+        <div class="edu-item fade-up-child"><div class="date">2021 – Present</div><h4>BS Computer Engineering minor in Cybersecurity</h4><div class="school">De La Salle University Manila</div><p>Relevant coursework: Data Structures and Algorithms, Digital Systems Design, Electronics Engineering, Computer Networks, Database Management, Machine Learning Fundamentals.</p><ul><li>Dean's Lister</li><li>Scholarship Recipient</li><li>Member of DLSU Badminton Society</li></ul></div>
+        <div class="edu-item fade-up-child"><div class="date">2020 – 2023</div><h4>Senior High School — ICT Strand</h4><div class="school">De La Salle University Dasmariñas</div><p>Graduated with Highest Honors. Focused on Information and Communication Technology.</p><ul><li>Highest Honors</li><li>Active member of Student Government</li><li>Badminton Varsity Player</li></ul></div>
+        <div class="edu-item fade-up-child"><div class="date">2016 – 2020</div><h4>Junior High School</h4><div class="school">Benedictine Institute of Learning</div><p>Completed basic education with High Honors.</p><ul><li>High Honors</li><li>VP of Student Government (2019-2020)</li><li>Student Photojournalist — School Publication (2018-2020)</li><li>VP of IT Club</li><li>Badminton Varsity Player</li></ul></div>
+      </div>
+    </section>
+
+    <section id="references" class="card-section fade-up">
+      <div class="testimonial-header fade-up-child"><h2>My <em>References</em> vouch for me,<br>I'm <strong>Confident You Will Too!</strong></h2><p>Professional references who can attest to my skills, character, and work ethic.</p></div>
+      <div class="slider-wrap fade-up-child">
+        <div class="slider-track" id="sliderTrack">
+          <div class="slide"><div class="slide-inner"><img src="assets/person1.jpg" alt=""><div><div class="quote-icon">66</div><div class="quote">"Bianca is an exceptionally dedicated student with a sharp aptitude for cybersecurity concepts. She consistently demonstrates a strong grasp of network protocols and an ability to solve complex technical problems."</div><div class="slider-name">Engr. Rafael S. Diaz, PhD</div><div class="slider-role">Professor, Computer Engineering Dept.</div><div class="ref-contact" style="margin-top:8px"><i class="bi bi-envelope"></i> rafael.diaz@dlsu.edu.ph &nbsp; <i class="bi bi-telephone"></i> +63 917 123 4567</div></div></div></div>
+          <div class="slide"><div class="slide-inner"><img src="assets/person2.jpg" alt=""><div><div class="quote-icon">66</div><div class="quote">"During her internship, Bianca displayed a professional work ethic and a keen eye for detail. She adapts quickly to new security tools and communicates complex ideas with clarity."</div><div class="slider-name">Ms. Clarissa V. Tan</div><div class="slider-role">Senior Cybersecurity Analyst / Internship Supervisor</div><div class="ref-contact" style="margin-top:8px"><i class="bi bi-envelope"></i> c.tan@technetworks.com &nbsp; <i class="bi bi-telephone"></i> +63 918 987 6543</div></div></div></div>
+          <div class="slide"><div class="slide-inner"><img src="assets/person3.jpg" alt=""><div><div class="quote-icon">66</div><div class="quote">"I mentored Bianca during her final project. She stands out for her ability to merge creative thinking with technical engineering. She is reliable, innovative, and a strong team player."</div><div class="slider-name">Mr. Gabriel A. Lim</div><div class="slider-role">Capstone Project Adviser</div><div class="ref-contact" style="margin-top:8px"><i class="bi bi-envelope"></i> gabriel.lim@dlsu.edu.ph &nbsp; <i class="bi bi-telephone"></i> +63 922 555 1234</div></div></div></div>
+        </div>
+        <div class="slider-dots" id="sliderDots"><button class="slider-dot active" data-slide="0"></button><button class="slider-dot" data-slide="1"></button><button class="slider-dot" data-slide="2"></button></div>
+      </div>
+    </section>
+
+    <section id="contact" class="card-section fade-up">
+      <h2 class="section-title fade-up-child">Contact</h2>
+      <p class="section-subtitle fade-up-child">Get in touch — I'd love to hear from you</p>
+      <div class="contact-grid">
+        <div class="contact-info-list">
+          <div class="contact-info-item fade-up-child"><i class="bi bi-geo-alt"></i><div><h4>Address</h4><p>Manila, Philippines</p></div></div>
+          <div class="contact-info-item fade-up-child"><i class="bi bi-telephone"></i><div><h4>Call Me</h4><p>+63 956 085 3210</p></div></div>
+          <div class="contact-info-item fade-up-child"><i class="bi bi-envelope"></i><div><h4>Email Me</h4><p>bianca_manganaan@dlsu.edu.ph</p></div></div>
+          <div class="contact-info-item fade-up-child"><i class="bi bi-clock"></i><div><h4>Response Time</h4><p>Within 24-48 hours</p></div></div>
+        </div>
+        <div class="contact-form fade-up-child">
+          <div class="form-row">
+            <div class="form-group"><label>Name <span class="required">*</span></label><input type="text" placeholder="Your Full Name" required></div>
+            <div class="form-group"><label>Email <span class="required">*</span></label><input type="email" placeholder="Your Email Address" required></div>
+          </div>
+          <div class="form-group"><label>Subject <span class="required">*</span></label><input type="text" placeholder="Your Subject" required></div>
+          <div class="form-group"><label>Message <span class="required">*</span></label><textarea placeholder="Write Your Message..." required></textarea></div>
+          <div class="fieldset-wrap"><legend>I'm interested in:</legend><div class="check-group">
+            <label class="check-item"><input type="checkbox">Web Development</label><label class="check-item"><input type="checkbox">Mobile Development</label><label class="check-item"><input type="checkbox">Data Analysis</label><label class="check-item"><input type="checkbox">Electronics/Hardware</label>
+          </div></div>
+          <button type="button" class="submit-btn" id="submitBtn">Send Message <i class="bi bi-arrow-return-left"></i></button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="copy">&copy; 2025 - All rights reserved by Bianca Manganaan.</div>
+    <div class="foot-links"><a href="#">Terms &amp; Conditions</a><a href="#">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+<script>
+// ═══ LOADING SCREEN WITH LIVE CLOCK ═══
+(function(){
+  const screen=document.getElementById('loaderScreen');
+  const welcome=document.getElementById('loaderWelcome');
+  const clockWrap=document.getElementById('loaderClockWrap');
+  const dateText=document.getElementById('loaderDateText');
+  const enterText=document.getElementById('loaderEnter');
+  const hrEl=document.getElementById('clockHr');
+  const minEl=document.getElementById('clockMin');
+  const secEl=document.getElementById('clockSec');
+  const ampmEl=document.getElementById('clockAmpm');
+  let clockInterval;
+
+  function pad(n){return n<10?'0'+n:''+n}
+  function updateClock(){
+    const now=new Date();
+    let h=now.getHours(),ampm=h>=12?'PM':'AM';
+    h=h%12;if(h===0)h=12;
+    hrEl.textContent=pad(h);
+    minEl.textContent=pad(now.getMinutes());
+    secEl.textContent=pad(now.getSeconds());
+    ampmEl.textContent=ampm;
+  }
+
+  // Phase 1: "Welcome" fade in
+  setTimeout(()=>welcome.classList.add('show'),300);
+
+  // Phase 2: fade out welcome, show date + clock
+  setTimeout(()=>{
+    welcome.classList.remove('show');
+    setTimeout(()=>{
+      const now=new Date();
+      const opts={weekday:'long',year:'numeric',month:'long',day:'numeric'};
+      dateText.textContent='Today is '+now.toLocaleDateString('en-US',opts);
+      updateClock();
+      clockInterval=setInterval(updateClock,1000);
+      clockWrap.classList.add('show');
+      // Show "click to enter" after a beat
+      setTimeout(()=>enterText.classList.add('show'),1200);
+    },500);
+  },2200);
+
+  // Click anywhere to dismiss
+  screen.addEventListener('click',dismiss);
+  document.addEventListener('keydown',dismiss);
+  // Auto dismiss after 8s
+  setTimeout(dismiss,8000);
+
+  let dismissed=false;
+  function dismiss(){
+    if(dismissed)return;dismissed=true;
+    clearInterval(clockInterval);
+    screen.classList.add('hidden');
+    // start typing after loader goes
+    setTimeout(startTyping,600);
+  }
+})();
+
+// ═══ SPIDER WEB CANVAS ═══
+(function(){
+  const c=document.getElementById('spiderCanvas'),ctx=c.getContext('2d');
+  let w,h,pts=[],mouse={x:null,y:null};
+  const N=90,CD=150,MD=180;
+  function resize(){w=c.width=window.innerWidth;h=c.height=document.documentElement.scrollHeight}
+  window.addEventListener('resize',resize);
+  setInterval(()=>{if(c.height!==document.documentElement.scrollHeight)resize()},2000);
+  function init(){pts=[];for(let i=0;i<N;i++)pts.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*2+1})}
+  window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY+window.scrollY});
+  window.addEventListener('mouseout',()=>{mouse.x=null;mouse.y=null});
+  function draw(){
+    ctx.clearRect(0,0,w,h);const sy=window.scrollY;
+    for(let i=0;i<pts.length;i++){
+      let p=pts[i];p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y-sy,p.r,0,Math.PI*2);ctx.fillStyle='rgba(212,135,77,0.35)';ctx.fill();
+      for(let j=i+1;j<pts.length;j++){let q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);if(d<CD){ctx.beginPath();ctx.moveTo(p.x,p.y-sy);ctx.lineTo(q.x,q.y-sy);ctx.strokeStyle='rgba(212,135,77,'+(0.12*(1-d/CD))+')';ctx.lineWidth=.6;ctx.stroke()}}
+      if(mouse.x!==null){let dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.sqrt(dx*dx+dy*dy);if(d<MD){ctx.beginPath();ctx.moveTo(p.x,p.y-sy);ctx.lineTo(mouse.x,mouse.y-sy);ctx.strokeStyle='rgba(212,135,77,'+(0.25*(1-d/MD))+')';ctx.lineWidth=.8;ctx.stroke()}}
+    }
+    requestAnimationFrame(draw);
+  }
+  resize();init();draw();
+})();
+
+// ═══ TYPING EFFECT ═══
+function startTyping(){
+  const t="I'M BIANCA MANGANAAN",el=document.getElementById('typingBadge');
+  let i=0;
+  function go(){if(i<=t.length){el.textContent=t.slice(0,i);i++;setTimeout(go,80)}}
+  go();
+}
+
+// ═══ ACTIVE NAV ═══
+const secs=document.querySelectorAll('section[id]'),navs=document.querySelectorAll('.sidebar-nav a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(scrollY>=s.offsetTop-200)c=s.id});navs.forEach(l=>{l.classList.remove('active');if(l.dataset.section===c)l.classList.add('active')})});
+
+// ═══ SCROLL REVEAL ═══
+(function(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        e.target.querySelectorAll('.fade-up-child').forEach((ch,i)=>{
+          setTimeout(()=>ch.classList.add('visible'),i*100);
+        });
+      }
+    });
+  },{threshold:0.05});
+  document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+})();
+
+// ═══ SKILL BARS ═══
+const so=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.bar-fill').forEach(b=>{b.style.width=b.dataset.width+'%'})})},{threshold:.3});
+document.querySelectorAll('.skills-section').forEach(s=>so.observe(s));
+
+// ═══ TESTIMONIAL SLIDER ═══
+(function(){const track=document.getElementById('sliderTrack'),dots=document.querySelectorAll('.slider-dot');let cur=0,tot=dots.length,auto;
+function go(n){cur=n;track.style.transform='translateX(-'+cur*100+'%)';dots.forEach((d,i)=>d.classList.toggle('active',i===cur))}
+dots.forEach(d=>d.addEventListener('click',()=>{go(+d.dataset.slide);clearInterval(auto);auto=setInterval(()=>go((cur+1)%tot),5000)}));
+auto=setInterval(()=>go((cur+1)%tot),5000)})();
+
+// ═══ BACK TO TOP ═══
+window.addEventListener('scroll',()=>{document.getElementById('backToTop').classList.toggle('show',scrollY>400)});
+
+// ═══ FORM ═══
+document.getElementById('submitBtn').addEventListener('click',function(){const f=this.closest('.contact-form'),ins=f.querySelectorAll('input,select,textarea');let d={};ins.forEach(i=>{if(i.type==='checkbox'){if(!d.interests)d.interests=[];if(i.checked)d.interests.push(i.parentElement.textContent.trim())}else d[i.placeholder||'f']=i.value});console.log('=== Form ===',d);alert('Thank you! Your message has been received.');ins.forEach(i=>{if(i.type==='checkbox')i.checked=false;else i.value=''})});
+</script>
+</body>
+</html>
