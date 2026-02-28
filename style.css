@@ -800,6 +800,51 @@ body.page-ready .top-header {
   line-height: 1.6;
 }
 
+.work-card-thumb {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1714 0%, rgba(212,135,77,0.12) 100%);
+}
+
+.work-card-thumb.thumb-alt {
+  background: linear-gradient(135deg, #1a1714 0%, rgba(232,153,90,0.15) 100%);
+}
+
+.work-card-thumb i {
+  font-size: 48px;
+  color: var(--orange);
+  opacity: 0.8;
+  transition: all .4s;
+}
+
+.work-card:hover .work-card-thumb i {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.btn-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 8px 20px;
+  border: var(--dash-border);
+  border-radius: 50px;
+  color: var(--orange);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all .3s;
+}
+
+.btn-card:hover {
+  background: rgba(212,135,77,0.08);
+  color: var(--orange-glow);
+}
+
 .exp-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

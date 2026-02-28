@@ -51,10 +51,19 @@ let dismissed=false;
     if(dismissed)return;dismissed=true;
     clearInterval(clockInterval);
     screen.classList.add('hidden');
-    
+
     // Add this line right here:
     document.body.classList.add('page-ready');
-    
+
+    // Dialog box greeting based on time of day
+    const hour = new Date().getHours();
+    let greeting;
+    if (hour >= 5 && hour < 12) greeting = "Good Morning!";
+    else if (hour >= 12 && hour < 18) greeting = "Good Afternoon!";
+    else if (hour >= 18 && hour < 22) greeting = "Good Evening!";
+    else greeting = "Good Night!";
+    alert(greeting);
+
     // start typing after loader goes
     setTimeout(startTyping,600);
   }
@@ -206,6 +215,17 @@ function containsSpam(message) {
 
 if (form) {
   form.addEventListener("submit", function (e) {
+    // Retrieve and log all form input values to console
+    const nameVal = form.querySelector("input[name='name']")?.value || '';
+    const emailVal = emailField.value;
+    const subjectVal = form.querySelector("input[name='_subject']")?.value || '';
+    const messageVal = messageField.value;
+    console.log("Form Submitted — Input Values:");
+    console.log("Name:", nameVal);
+    console.log("Email:", emailVal);
+    console.log("Subject:", subjectVal);
+    console.log("Message:", messageVal);
+
     // Check 1: Basic Email Validation
     if (!emailField.value.includes("@")) {
       alert("Enter a valid email address.");
